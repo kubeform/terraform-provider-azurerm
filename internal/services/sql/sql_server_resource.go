@@ -33,6 +33,13 @@ func resourceSqlServer() *pluginsdk.Resource {
 		Update: resourceSqlServerCreateUpdate,
 		Delete: resourceSqlServerDelete,
 
+		DeprecationMessage: func() string {
+			if features.ThreePointOhBeta() {
+				return "The `azurerm_sql_server` resource is deprecated and will be removed in version 4.0 of the AzureRM provider. Please use the `azurerm_mssql_server` resource instead."
+			}
+			return ""
+		}(),
+
 		Importer: pluginsdk.ImporterValidatingResourceId(func(id string) error {
 			_, err := parse.ServerID(id)
 			return err

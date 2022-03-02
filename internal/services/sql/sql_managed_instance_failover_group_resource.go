@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/azure"
 	"github.com/hashicorp/terraform-provider-azurerm/helpers/tf"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/clients"
+	"github.com/hashicorp/terraform-provider-azurerm/internal/features"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/services/mssql/validate"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/services/sql/parse"
 	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/pluginsdk"
@@ -24,6 +25,13 @@ func resourceSqlInstanceFailoverGroup() *pluginsdk.Resource {
 		Read:   resourceSqlInstanceFailoverGroupRead,
 		Update: resourceSqlInstanceFailoverGroupCreateUpdate,
 		Delete: resourceSqlInstanceFailoverGroupDelete,
+
+		DeprecationMessage: func() string {
+			if features.ThreePointOhBeta() {
+				return "The `azurerm_sql_managed_instance_failover_group` resource is deprecated and will be removed in version 4.0 of the AzureRM provider. Please use the `azurerm_mssql_managed_instance_failover_group` resource instead."
+			}
+			return ""
+		}(),
 
 		Importer: pluginsdk.ImporterValidatingResourceId(func(id string) error {
 			_, err := parse.InstanceFailoverGroupID(id)

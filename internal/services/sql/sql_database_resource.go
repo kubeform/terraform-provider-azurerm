@@ -32,6 +32,13 @@ func resourceSqlDatabase() *pluginsdk.Resource {
 		Update: resourceSqlDatabaseCreateUpdate,
 		Delete: resourceSqlDatabaseDelete,
 
+		DeprecationMessage: func() string {
+			if features.ThreePointOhBeta() {
+				return "The `azurerm_sql_database` resource is deprecated and will be removed in version 4.0 of the AzureRM provider. Please use the `azurerm_mssql_database` resource instead."
+			}
+			return ""
+		}(),
+
 		Importer: pluginsdk.ImporterValidatingResourceId(func(id string) error {
 			_, err := parse.DatabaseID(id)
 			return err
